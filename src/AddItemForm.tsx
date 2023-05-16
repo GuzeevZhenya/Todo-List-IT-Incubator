@@ -1,25 +1,28 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, { ChangeEvent, KeyboardEvent, useState } from "react";
 
 type PropsType = {
-  todolistId: string;
-  addTask: (newTitle: string, todolistId: string) => void;
+  callBack: (newTitle: string) => void;
 };
 
 export const AddItemForm = (props: PropsType) => {
-  let [title, setTitle] = useState('');
+  let [title, setTitle] = useState("");
   let [error, setError] = useState<string | null>(null);
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.currentTarget.value);
   };
 
+  const addHandler = () =>{
+
+  }
+
   const addTask = () => {
     let newTitle = title.trim();
-    if (newTitle !== '') {
-      props.addTask(newTitle, props.todolistId);
-      setTitle('');
+    if (newTitle !== "") {
+      props.callBack(newTitle);
+      setTitle("");
     } else {
-      setError('Title is required');
+      setError("Title is required");
     }
   };
 
@@ -36,10 +39,10 @@ export const AddItemForm = (props: PropsType) => {
         value={title}
         onChange={onChangeHandler}
         onKeyPress={onKeyPressHandler}
-        className={error ? 'error' : ''}
+        className={error ? "error" : ""}
       />
       <button onClick={addTask}>+</button>
-      {error && <div className='error-message'>{error}</div>}
+      {error && <div className="error-message">{error}</div>}
     </div>
   );
 };
