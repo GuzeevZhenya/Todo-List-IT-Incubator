@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
-import './App.css';
-import {TaskType, Todolist} from './Todolist';
-import {v1} from 'uuid';
-import {AddItemForm} from './AddItemForm';
-import AppBar from '@mui/material/AppBar/AppBar';
+import React, { useState } from "react";
+import "./App.css";
+import { TaskType, Todolist } from "./Todolist";
+import { v1 } from "uuid";
+import { AddItemForm } from "./AddItemForm";
+import AppBar from "@mui/material/AppBar/AppBar";
 import {
   Button,
   Container,
@@ -12,10 +12,10 @@ import {
   Paper,
   Toolbar,
   Typography,
-} from '@mui/material';
-import {Menu} from '@mui/icons-material';
+} from "@mui/material";
+import { Menu } from "@mui/icons-material";
 
-export type FilterValuesType = 'all' | 'active' | 'completed';
+export type FilterValuesType = "all" | "active" | "completed";
 export type TodolistType = {
   id: string;
   title: string;
@@ -31,18 +31,18 @@ function App() {
   let todolistId2 = v1();
 
   let [todolists, setTodolists] = useState<Array<TodolistType>>([
-    {id: todolistId1, title: 'What to learn', filter: 'all'},
-    {id: todolistId2, title: 'What to buy', filter: 'all'},
+    { id: todolistId1, title: "What to learn", filter: "all" },
+    { id: todolistId2, title: "What to buy", filter: "all" },
   ]);
 
   let [tasks, setTasks] = useState<TasksStateType>({
     [todolistId1]: [
-      {id: v1(), title: 'HTML&CSS', isDone: true},
-      {id: v1(), title: 'JS', isDone: true},
+      { id: v1(), title: "HTML&CSS", isDone: true },
+      { id: v1(), title: "JS", isDone: true },
     ],
     [todolistId2]: [
-      {id: v1(), title: 'Milk', isDone: true},
-      {id: v1(), title: 'React Book', isDone: true},
+      { id: v1(), title: "Milk", isDone: true },
+      { id: v1(), title: "React Book", isDone: true },
     ],
   });
 
@@ -52,17 +52,17 @@ function App() {
     // перезапишем в этом объекте массив для нужного тудулиста отфилтрованным массивом:
     tasks[todolistId] = todolistTasks.filter((t) => t.id != id);
     // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
-    setTasks({...tasks});
+    setTasks({ ...tasks });
   }
 
   function addTask(title: string, todolistId: string) {
-    let task = {id: v1(), title: title, isDone: false};
+    let task = { id: v1(), title: title, isDone: false };
     //достанем нужный массив по todolistId:
     let todolistTasks = tasks[todolistId];
     // перезапишем в этом объекте массив для нужного тудулиста копией, добавив в начало новую таску:
     tasks[todolistId] = [task, ...todolistTasks];
     // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
-    setTasks({...tasks});
+    setTasks({ ...tasks });
   }
 
   function changeStatus(id: string, isDone: boolean, todolistId: string) {
@@ -74,7 +74,7 @@ function App() {
     if (task) {
       task.isDone = isDone;
       // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
-      setTasks({...tasks});
+      setTasks({ ...tasks });
     }
   }
 
@@ -87,7 +87,7 @@ function App() {
     if (task) {
       task.title = newTitle;
       // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
-      setTasks({...tasks});
+      setTasks({ ...tasks });
     }
   }
 
@@ -105,7 +105,7 @@ function App() {
     // удалим таски для этого тудулиста из второго стейта, где мы храним отдельно таски
     delete tasks[id]; // удаляем св-во из объекта... значением которого являлся массив тасок
     // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
-    setTasks({...tasks});
+    setTasks({ ...tasks });
   }
 
   function changeTodolistTitle(id: string, title: string) {
@@ -123,7 +123,7 @@ function App() {
     let newTodolist: TodolistType = {
       id: newTodolistId,
       title: title,
-      filter: 'all',
+      filter: "all",
     };
     setTodolists([newTodolist, ...todolists]);
     setTasks({
@@ -133,18 +133,18 @@ function App() {
   }
 
   return (
-    <div className='App'>
-      <AppBar position='static'>
+    <div className="App">
+      <AppBar position="static">
         <Toolbar>
-          <IconButton edge='start' color='inherit' aria-label='menu'>
+          <IconButton edge="start" color="inherit" aria-label="menu">
             <Menu />
           </IconButton>
-          <Typography variant='h6'>News</Typography>
-          <Button color='inherit'>Login</Button>
+          <Typography variant="h6">News</Typography>
+          <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
       <Container fixed>
-        <Grid container style={{padding: '20px'}}>
+        <Grid container style={{ padding: "20px" }}>
           <AddItemForm addItem={addTodolist} />
         </Grid>
         <Grid container spacing={3}>
@@ -152,12 +152,12 @@ function App() {
             let allTodolistTasks = tasks[tl.id];
             let tasksForTodolist = allTodolistTasks;
 
-            if (tl.filter === 'active') {
+            if (tl.filter === "active") {
               tasksForTodolist = allTodolistTasks.filter(
                 (t) => t.isDone === false
               );
             }
-            if (tl.filter === 'completed') {
+            if (tl.filter === "completed") {
               tasksForTodolist = allTodolistTasks.filter(
                 (t) => t.isDone === true
               );
@@ -165,7 +165,7 @@ function App() {
 
             return (
               <Grid key={tl.id} item>
-                <Paper style={{padding: '10px'}}>
+                <Paper style={{ padding: "10px" }}>
                   <Todolist
                     key={tl.id}
                     id={tl.id}
