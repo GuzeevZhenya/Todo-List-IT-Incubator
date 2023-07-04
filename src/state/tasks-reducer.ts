@@ -89,7 +89,8 @@ export const tasksReducer = (
 };
 
 export const removeTaskAC = (taskId: string, todolistId: string) => {
-  return {
+   
+    return {
     type: "REMOVE-TASK",
     payload: {
       taskId,
