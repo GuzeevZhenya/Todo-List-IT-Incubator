@@ -17,8 +17,10 @@ type ActionsType =
   | AddTodolistActionType
   | RemoveTodolistActionType;
 
+let initialState: TasksStateType = {};
+
 export const tasksReducer = (
-  state: TasksStateType,
+  state = initialState,
   action: ActionsType
 ): TasksStateType => {
   switch (action.type) {
@@ -89,8 +91,7 @@ export const tasksReducer = (
 };
 
 export const removeTaskAC = (taskId: string, todolistId: string) => {
-   
-    return {
+  return {
     type: "REMOVE-TASK",
     payload: {
       taskId,
