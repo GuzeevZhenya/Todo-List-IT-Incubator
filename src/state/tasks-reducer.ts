@@ -84,28 +84,14 @@ export const tasksReducer = (
     }
     case "SET-TODOLISTS": {
       const stateCopy = { ...state };
-      action.todolists.forEach((tl: { id: string | number; }) => {
+      action.todolists.forEach((tl: { id: string | number }) => {
         stateCopy[tl.id] = [];
       });
       return stateCopy;
     }
     case "ADD-TASK": {
       const stateCopy = { ...state };
-      const newTask: TaskType = {
-        id: v1(),
-        title: action.title,
-        status: TaskStatuses.New,
-        todoListId: action.todolistId,
-        description: "",
-        startDate: "",
-        deadline: "",
-        addedDate: "",
-        order: 0,
-        priority: TaskPriorities.Low,
-      };
-      const tasks = stateCopy[action.todolistId];
-      const newTasks = [newTask, ...tasks];
-      stateCopy[action.todolistId] = newTasks;
+
       return stateCopy;
     }
     case "CHANGE-TASK-STATUS": {
@@ -177,11 +163,8 @@ export const changeTaskTitleAC = (
   return { type: "CHANGE-TASK-TITLE", title, todolistId, taskId };
 };
 
-export const setTasksAC = (
-  tasks: TaskType[],
-  todolistId: string
-) => {
-  return { type: "SET-TASKS", tasks, todolistId } as const
+export const setTasksAC = (tasks: TaskType[], todolistId: string) => {
+  return { type: "SET-TASKS", tasks, todolistId } as const;
 };
 
 export const getTasksTC = (todoListId: string): any => {
@@ -189,5 +172,21 @@ export const getTasksTC = (todoListId: string): any => {
     todolistsAPI
       .getTasks(todoListId)
       .then((res) => dispatch(setTasksAC(res.data.items, todoListId)));
+  };
+};
+
+export const deleteTasksTC = (todolistId: string, taskId: string): any => {
+  return (dispatch: Dispatch) => {
+    todolistsAPI
+      .deleteTask(todolistId, taskId)
+      .then((res) => dispatch(removeTaskAC(taskId, todolistId)));
+  };
+};
+
+export const addTasksTC = (todolistId: string, title: string): any => {
+  return (dispatch: Dispatch) => {
+    todolistsAPI
+      .createTask(todolistId, title)
+      .then((res) => dispatch(addTaskAC(res.data.data.item, todolistId)));
   };
 };

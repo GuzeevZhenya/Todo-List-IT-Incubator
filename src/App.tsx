@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import "./App.css";
 import { Todolist } from "./Todolist";
 import { AddItemForm } from "./AddItemForm";
@@ -12,25 +12,25 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { Menu } from "@mui/icons-material";
 import {
-  addTodolistAC,
   addTodolistTC,
   changeTodolistFilterAC,
   changeTodolistTitleAC,
   FilterValuesType,
   getTodoTC,
   removeTodolistAC,
-  setTodolistsAC,
+  removeTodolistTC,
   TodolistDomainType,
 } from "./state/todolists-reducer";
 import {
-  addTaskAC,
+  addTasksTC,
   changeTaskStatusAC,
   changeTaskTitleAC,
+  deleteTasksTC,
   removeTaskAC,
 } from "./state/tasks-reducer";
-import { useDispatch, useSelector } from "react-redux";
-import { AppRootStateType, ThunkType, useAppDispatch } from "./state/store";
-import { TaskStatuses, TaskType, todolistsAPI } from "./api/todolists-api";
+import { useSelector } from "react-redux";
+import { AppRootStateType, useAppDispatch } from "./state/store";
+import { TaskStatuses, TaskType } from "./api/todolists-api";
 
 export type TasksStateType = {
   [key: string]: Array<TaskType>;
@@ -51,12 +51,12 @@ function App() {
   }, []);
 
   const removeTask = useCallback(function (id: string, todolistId: string) {
-    const action = removeTaskAC(id, todolistId);
-    dispatch(action);
+    const thunk = deleteTasksTC(todolistId, id);
+    dispatch(thunk);
   }, []);
 
   const addTask = useCallback(function (title: string, todolistId: string) {
-    const thunk = addTodolistTC(title);
+    const thunk = addTasksTC(todolistId, title);
     dispatch(thunk);
   }, []);
 
@@ -90,8 +90,8 @@ function App() {
   []);
 
   const removeTodolist = useCallback(function (id: string) {
-    const action = removeTodolistAC(id);
-    dispatch(action);
+    const thunk = removeTodolistTC(id);
+    dispatch(thunk);
   }, []);
 
   const changeTodolistTitle = useCallback(function (id: string, title: string) {

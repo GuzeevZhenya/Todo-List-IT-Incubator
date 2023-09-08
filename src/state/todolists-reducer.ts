@@ -78,6 +78,7 @@ export const todolistsReducer = (
     case "SET-TODOLISTS": {
       return action.todolists.map((el) => ({ ...el, filter: "all" }));
     }
+
     default:
       return state;
   }
@@ -131,5 +132,13 @@ export const addTodolistTC = (title: string): any => {
     todolistsAPI
       .createTodolist(title)
       .then((res) => dispatch(addTodolistAC(res.data.data.item)));
+  };
+};
+
+export const removeTodolistTC = (id: string): any => {
+  return (dispatch: Dispatch) => {
+    todolistsAPI
+      .deleteTodolist(id)
+      .then((res) => dispatch(removeTodolistAC(id)));
   };
 };
