@@ -17,21 +17,20 @@ import {
   changeTodolistTitleAC,
   FilterValuesType,
   getTodoTC,
-  removeTodolistAC,
   removeTodolistTC,
   TodolistDomainType,
 } from "./state/todolists-reducer";
 import {
   addTasksTC,
-  changeTaskStatusAC,
   changeTaskTitleAC,
   deleteTasksTC,
-  removeTaskAC,
   updateTasksTC,
 } from "./state/tasks-reducer";
 import { useSelector } from "react-redux";
 import { AppRootStateType, useAppDispatch } from "./state/store";
 import { TaskStatuses, TaskType } from "./api/todolists-api";
+import LinearProgress from "@mui/material/LinearProgress";
+import CustomizedSnackbars from "./ErrorSnackBar/ErrorSnackBar";
 
 export type TasksStateType = {
   [key: string]: Array<TaskType>;
@@ -122,6 +121,7 @@ function App() {
           <Typography variant="h6">News</Typography>
           <Button color="inherit">Login</Button>
         </Toolbar>
+        <LinearProgress />
       </AppBar>
       <Container fixed>
         <Grid container style={{ padding: "20px" }}>
