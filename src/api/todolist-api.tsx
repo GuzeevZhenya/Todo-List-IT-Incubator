@@ -1,32 +1,54 @@
-import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-export default {
-  title: "API",
+const instance = axios.create({
+  baseURL: "https://social-network.samuraijs.com/api/1.1/",
+  withCredentials: true,
+  headers: {
+    "API-KEY": "c8a46d02-6c53-4b46-a5bc-12e0cc125486",
+  },
+});
+
+export const todolistApi = {
+  getTodolists() {
+    return instance.get<TodolistType[]>("todo-lists");
+  },
+  addTodolists(title: string) {
+    return instance.post<DeleteTodolistType>("todo-lists", { title });
+  },
+  deleteTodolists(id: string) {
+    return instance.delete<CreateTodoListType>(`todo-lists/${id}`);
+  },
+  updateTodolists(todolistId: string, title: string) {
+    instance.put(`todo-lists/${todolistId}`, {
+      title,
+    });
+  },
 };
 
-export const GetTodolists = () => {
-  const [state, setState] = useState<any>(null);
-  useEffect(() => {
-    // здесь мы будем делать запрос и ответ закидывать в стейт.
-    // который в виде строки будем отображать в div-ке
-  }, []);
-  return <div>{JSON.stringify(state)}</div>;
+type TodolistType = {
+  id: string;
+  title: string;
+  addedDate: Date;
+  order: number;
 };
-export const CreateTodolist = () => {
-  const [state, setState] = useState<any>(null);
-  useEffect(() => {}, []);
 
-  return <div>{JSON.stringify(state)}</div>;
+type DeleteTodolistType = {
+  resultCode: number;
+  messages: string[];
+  data: {};
 };
-export const DeleteTodolist = () => {
-  const [state, setState] = useState<any>(null);
-  useEffect(() => {}, []);
 
-  return <div>{JSON.stringify(state)}</div>;
+type CreateTodoListType = {
+  resultCode: number;
+  messages: string[];
+  data: {
+    item: TodolistType;
+  };
 };
-export const UpdateTodolistTitle = () => {
-  const [state, setState] = useState<any>(null);
-  useEffect(() => {}, []);
 
-  return <div>{JSON.stringify(state)}</div>;
+type UpdateTodoListTyhpe = {
+  data: {};
+  fieldsErrors: [];
+  messages: [];
+  resultCode: number;
 };

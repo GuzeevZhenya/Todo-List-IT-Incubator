@@ -17,8 +17,6 @@ export const GetTodolists = () => {
   const [state, setState] = useState<any>(null);
   useEffect(() => {
     instance.get("todo-lists").then((res) => setState(res.data));
-    // здесь мы будем делать запрос и ответ закидывать в стейт.
-    // который в виде строки будем отображать в div-ке
   }, []);
   return <div>{JSON.stringify(state)}</div>;
 };
@@ -36,7 +34,7 @@ export const DeleteTodolist = () => {
   const [state, setState] = useState<any>(null);
   useEffect(() => {
     instance
-      .delete(`todo-lists/${"e7045f99-03ad-41ce-98fd-9072ea9166a2"}`)
+      .delete(`todo-lists/${"447ab928-860b-4839-b72c-83c054199991"}`)
       .then((res) => setState(res.data));
   }, []);
 
@@ -46,7 +44,7 @@ export const UpdateTodolistTitle = () => {
   const [state, setState] = useState<any>(null);
   useEffect(() => {
     instance
-      .put(`todo-lists/e7045f99-03ad-41ce-98fd-9072ea9166a2`, { title: "1" })
+      .put(`todo-lists/447ab928-860b-4839-b72c-83c054199991`, { title: "2" })
       .then((res) => setState(res.data));
   }, []);
 
