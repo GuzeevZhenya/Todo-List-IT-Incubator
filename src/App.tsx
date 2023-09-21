@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import "./App.css";
 import { TaskType, Todolist } from "./Todolist";
 import { AddItemForm } from "./AddItemForm";
@@ -12,6 +12,8 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { Menu } from "@mui/icons-material";
 import {
+  AddTodolistTC,
+  GetTodolistsTC,
   addTodolistAC,
   changeTodolistFilterAC,
   changeTodolistTitleAC,
@@ -21,6 +23,7 @@ import {
   addTaskAC,
   changeTaskStatusAC,
   changeTaskTitleAC,
+  getTasksTC,
   removeTaskAC,
 } from "./state/tasks-reducer";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,7 +33,8 @@ export type FilterValuesType = "all" | "active" | "completed";
 export type TodolistType = {
   id: string;
   title: string;
-  filter: FilterValuesType;
+  addedDate: Date;
+  order: number;
 };
 
 export type TasksStateType = {
@@ -46,14 +50,18 @@ function App() {
   );
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(GetTodolistsTC());
+  }, []);
+
   const removeTask = useCallback(function (id: string, todolistId: string) {
     const action = removeTaskAC(id, todolistId);
     dispatch(action);
   }, []);
 
   const addTask = useCallback(function (title: string, todolistId: string) {
-    const action = addTaskAC(title, todolistId);
-    dispatch(action);
+    const thunk = getTasksTC(todolistId);
+    dispatch(thunk);
   }, []);
 
   const changeStatus = useCallback(function (
@@ -97,8 +105,8 @@ function App() {
 
   const addTodolist = useCallback(
     (title: string) => {
-      const action = addTodolistAC(title);
-      dispatch(action);
+      const thunk = AddTodolistTC(title);
+      dispatch(thunk);
     },
     [dispatch]
   );
@@ -126,6 +134,7 @@ function App() {
               <Grid item key={tl.id}>
                 <Paper style={{ padding: "10px" }}>
                   <Todolist
+                    todolist={tl}
                     id={tl.id}
                     title={tl.title}
                     tasks={allTodolistTasks}
@@ -133,7 +142,7 @@ function App() {
                     changeFilter={changeFilter}
                     addTask={addTask}
                     changeTaskStatus={changeStatus}
-                    filter={tl.filter}
+                    // filter={tl.filter}
                     removeTodolist={removeTodolist}
                     changeTaskTitle={changeTaskTitle}
                     changeTodolistTitle={changeTodolistTitle}
