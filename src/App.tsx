@@ -21,6 +21,7 @@ import {
 } from "./state/todolists-reducer";
 import {
   addTaskAC,
+  addTasksTC,
   changeTaskStatusAC,
   changeTaskTitleAC,
   getTasksTC,
@@ -60,7 +61,7 @@ function App() {
   }, []);
 
   const addTask = useCallback(function (title: string, todolistId: string) {
-    const thunk = getTasksTC(todolistId);
+    const thunk = addTasksTC(title,todolistId);
     dispatch(thunk);
   }, []);
 

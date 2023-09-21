@@ -148,3 +148,11 @@ export const getTasksTC = (todolistId: string): any => {
       .then((tl) => dispatch(getTaskAC(tl.data.items, todolistId)));
   };
 };
+
+export const addTasksTC = (title: string, todoListId: string): any => {
+  return (dispatch: Dispatch) => {
+    todolistApi
+      .createTasks(todoListId, title)
+      .then((tl) => dispatch(addTaskAC(tl.data.data.item)));
+  };
+};
