@@ -26,19 +26,19 @@ export type TodolistDomainType = TodolistType & {
   filter: FilterValuesType;
 };
 
-// export type GetTodolistsType = ReturnType<typeof GetTodolistsTC>;
+export type GetTodolistsType = ReturnType<typeof getTodolistsAC>;
 
-export type SetTodolists = {
-  type: "GET-TODOLISTS";
-  todolists: TodolistType[];
-};
+// export type SetTodolistsType = {
+//   type: "GET-TODOLISTS";
+//   todolists: TodolistType[];
+// };
 
 type ActionsType =
   | RemoveTodolistActionType
   | AddTodolistActionType
   | ChangeTodolistTitleActionType
   | ChangeTodolistFilterActionType
-  | SetTodolists;
+  | GetTodolistsType;
 
 const initialState: Array<TodolistType> = [];
 
@@ -96,6 +96,7 @@ export const removeTodolistAC = (
 export const addTodolistAC = (
   todolist: TodolistType
 ): AddTodolistActionType => {
+  console.log(todolist);
   return { type: "ADD-TODOLIST", todolist };
 };
 export const changeTodolistTitleAC = (
@@ -115,7 +116,7 @@ export const getTodolistsAC = (todolists: TodolistType[]) => {
   return { type: "GET-TODOLISTS", todolists } as const;
 };
 
-export const GetTodolistsTC = (): any => {
+export const GetTodolistsTC = () => {
   return (dispatch: Dispatch) => {
     todolistApi
       .getTodolists()
@@ -128,5 +129,14 @@ export const AddTodolistTC = (title: string): any => {
     todolistApi
       .createTodolist(title)
       .then((res) => dispatch(addTodolistAC(res.data.data.item)));
+  };
+};
+
+export const RemoveTodolistTC = (id: string): any => {
+  return (dispatch: Dispatch) => {
+    console.log(id);
+    todolistApi
+      .deleteTodolists(id)
+      .then((res) => dispatch(removeTodolistAC(id)));
   };
 };

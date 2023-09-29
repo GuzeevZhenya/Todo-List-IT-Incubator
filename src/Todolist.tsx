@@ -9,6 +9,7 @@ import { FilterValuesType, TodolistType } from "./App";
 import { TodolistDomainType } from "./state/todolists-reducer";
 import { getTasksTC } from "./state/tasks-reducer";
 import { useDispatch } from "react-redux";
+import { useAppDispatch } from "./state/store";
 
 export enum TaskStatuses {
   New = 0,
@@ -71,7 +72,7 @@ type PropsType = {
 };
 
 export const Todolist = React.memo(function (props: PropsType) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getTasksTC(props.id));
@@ -110,10 +111,10 @@ export const Todolist = React.memo(function (props: PropsType) {
   let tasksForTodolist = props.tasks;
 
   // if (props.filter === "active") {
-  //   tasksForTodolist = props.tasks.filter((t) => t.isDone === false);
+  //   tasksForTodolist = props.tasks.filter((t) => t.isDone === TaskStatuses.New);
   // }
   // if (props.filter === "completed") {
-  //   tasksForTodolist = props.tasks.filter((t) => t.isDone === true);
+  //   tasksForTodolist = props.tasks.filter((t) => t.isDone === TaskStatuses.Completed);
   // }
 
   return (
