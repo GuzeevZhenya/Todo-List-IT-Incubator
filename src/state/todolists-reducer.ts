@@ -118,6 +118,7 @@ export const getTodolistsAC = (todolists: TodolistType[]) => {
 
 export const GetTodolistsTC = () => {
   return (dispatch: Dispatch) => {
+    console.log(1)
     todolistApi
       .getTodolists()
       .then((res) => dispatch(getTodolistsAC(res.data)));
@@ -134,7 +135,7 @@ export const AddTodolistTC = (title: string): any => {
 
 export const RemoveTodolistTC = (id: string): any => {
   return (dispatch: Dispatch) => {
-    console.log(id);
+     
     todolistApi
       .deleteTodolists(id)
       .then((res) => dispatch(removeTodolistAC(id)));

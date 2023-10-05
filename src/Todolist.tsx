@@ -59,7 +59,12 @@ type PropsType = {
   tasks: Array<TaskType>;
   changeFilter: (value: FilterValuesType, todolistId: string) => void;
   addTask: (title: string, todolistId: string) => void;
-  changeTaskStatus: (id: string, isDone: boolean, todolistId: string) => void;
+  updateTask: (
+    id: string,
+    todolistId: string,
+    title?: string,
+    status?: TaskStatuses
+  ) => void;
   changeTaskTitle: (
     taskId: string,
     newTitle: string,
@@ -134,8 +139,7 @@ export const Todolist = React.memo(function (props: PropsType) {
               task={t}
               todolistId={props.id}
               removeTask={props.removeTask}
-              changeTaskTitle={props.changeTaskTitle}
-              changeTaskStatus={props.changeTaskStatus}
+              updateTask={props.updateTask}
             />
           ))}
       </div>

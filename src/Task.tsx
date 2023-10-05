@@ -12,6 +12,12 @@ type TaskPropsType = {
   task: TaskType;
   todolistId: string;
   //   status: TaskStatuses;
+  updateTask: (
+    id: string,
+    todolistId: string,
+    title?: string,
+    status?: TaskStatuses
+  ) => void;
   changeTaskStatus: (id: string, isDone: boolean, todolistId: string) => void;
   changeTaskTitle: (
     taskId: string,
@@ -26,12 +32,10 @@ export const Task = React.memo((props: TaskPropsType) => {
     [props.task.id, props.todolistId]
   );
 
-  
-
   const onChangeHandler = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       let newIsDoneValue = e.currentTarget.checked;
-      props.changeTaskStatus(props.task.id, newIsDoneValue, props.todolistId);
+      props.updateTask(props.task.id, newIsDoneValue, props.todolistId);
     },
     [props.task.id, props.todolistId]
   );

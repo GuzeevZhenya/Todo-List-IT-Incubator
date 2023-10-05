@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import "./App.css";
-import { TaskType, Todolist } from "./Todolist";
+import { TaskStatuses, TaskType, Todolist } from "./Todolist";
 import { AddItemForm } from "./AddItemForm";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -24,9 +24,10 @@ import {
   addTaskAC,
   addTasksTC,
   changeTaskStatusAC,
-  changeTaskTitleAC,
   getTasksTC,
   removeTaskAC,
+  removeTaskTC,
+  updateTaskTC,
 } from "./state/tasks-reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkType, AppRootStateType, useAppDispatch } from "./state/store";
@@ -58,8 +59,9 @@ function App() {
   }, []);
 
   const removeTask = useCallback(function (id: string, todolistId: string) {
-    const action = removeTaskAC(id, todolistId);
-    dispatch(action);
+    console.log(todolistId, id);
+    const thunk = removeTaskTC(todolistId, id);
+    dispatch(thunk);
   }, []);
 
   const addTask = useCallback(function (title: string, todolistId: string) {
@@ -67,22 +69,15 @@ function App() {
     dispatch(thunk);
   }, []);
 
-  const changeStatus = useCallback(function (
-    id: string,
-    isDone: boolean,
-    todolistId: string
-  ) {
-    const action = changeTaskStatusAC(id, isDone, todolistId);
-    dispatch(action);
-  },
-  []);
 
-  const changeTaskTitle = useCallback(function (
+
+  const updateTask = useCallback(function (
     id: string,
-    newTitle: string,
-    todolistId: string
+    todolistId: string,
+    title?: string,
+    status?: TaskStatuses
   ) {
-    const action = changeTaskTitleAC(id, newTitle, todolistId);
+    const action = updateTaskTC(todolistId, id, { title, status });
     dispatch(action);
   },
   []);
@@ -145,10 +140,9 @@ function App() {
                     removeTask={removeTask}
                     changeFilter={changeFilter}
                     addTask={addTask}
-                    changeTaskStatus={changeStatus}
                     // filter={tl.filter}
                     removeTodolist={removeTodolist}
-                    changeTaskTitle={changeTaskTitle}
+                    updateTask={updateTask}
                     changeTodolistTitle={changeTodolistTitle}
                   />
                 </Paper>
