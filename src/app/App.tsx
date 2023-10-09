@@ -24,10 +24,15 @@ function App() {
   const status = useSelector<AppRootStateType, RequestStatusType>(
     (state) => state.app.status
   );
+
+  const error = useSelector<AppRootStateType, string | null>(
+    (state) => state.app.error
+  );
+  console.log(error);
   return (
     <div className="App">
       <AppBar position="static">
-        <ErrorSnackbar />
+        {error && <ErrorSnackbar />}
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="menu">
             <Menu />

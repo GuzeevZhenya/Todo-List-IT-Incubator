@@ -10,6 +10,7 @@ import Button from "@mui/material/Button";
 import { Delete } from "@mui/icons-material";
 import { useAppDispatch } from "../../../app/store";
 import { LinearProgress } from "@mui/material";
+import { RequestStatusType } from "../../../app/app-reducer";
 
 type PropsType = {
   id: string;
@@ -31,6 +32,7 @@ type PropsType = {
   removeTodolist: (id: string) => void;
   changeTodolistTitle: (id: string, newTitle: string) => void;
   filter: FilterValuesType;
+  entityStatus: RequestStatusType;
 };
 
 export const Todolist = React.memo(function (props: PropsType) {
@@ -88,11 +90,14 @@ export const Todolist = React.memo(function (props: PropsType) {
     <div>
       <h3>
         <EditableSpan value={props.title} onChange={changeTodolistTitle} />
-        <IconButton onClick={removeTodolist}>
+        <IconButton
+          onClick={removeTodolist}
+          disabled={props.entityStatus === "loading"}
+        >
           <Delete />
         </IconButton>
       </h3>
-      <AddItemForm addItem={addTask} />
+      <AddItemForm addItem={addTask}  disabled={props.entityStatus === "loading"} />
       <div>
         {tasksForTodolist.map((t) => (
           <Task

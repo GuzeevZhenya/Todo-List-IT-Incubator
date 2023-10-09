@@ -1,3 +1,4 @@
+import { setAppStatusAC } from "./../../app/app-reducer";
 import {
   AddTodolistActionType,
   RemoveTodolistActionType,
@@ -12,7 +13,11 @@ import {
 } from "../../api/todolists-api";
 import { Dispatch } from "redux";
 import { AppRootStateType } from "../../app/store";
-import { setAppErrorType, setAppStatusAC, setAppStatusType, setErrorAC } from "../../app/app-reducer";
+import {
+  setAppErrorType,
+  setAppStatusType,
+  setErrorAC,
+} from "../../app/app-reducer";
 
 const initialState: TasksStateType = {};
 
@@ -97,29 +102,35 @@ export const removeTaskTC =
     });
   };
 
-  enum RESULT_CODE  {
-    SECCEDED = 0,
-    ERROR = 1,
-
-  }
+enum RESULT_CODE {
+  SECCEDED = 0,
+  ERROR = 1,
+}
 export const addTaskTC =
   (title: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
     dispatch(setAppStatusAC("loading"));
-    todolistsAPI.createTask(todolistId, title).then((res) => {
-      if (res.data.resultCode === RESULT_CODE.SECCEDED) {
-        const task = res.data.data.item;
-        const action = addTaskAC(task);
-        dispatch(action);
-        dispatch(setAppStatusAC("succeded"));
-      }else{
-         if(res.data.messages.length){
-            dispatch(setErrorAC(res.data.messages[0]))
-         }else{
-            dispatch(setErrorAC('someError'))
-         }
+    todolistsAPI
+      .createTask(todolistId, title)
+      .then((res) => {
+        if (res.data.resultCode === RESULT_CODE.SECCEDED) {
+          const task = res.data.data.item;
+          const action = addTaskAC(task);
+          dispatch(action);
           dispatch(setAppStatusAC("succeded"));
-      }
-    });
+        } else {
+          if (res.data.messages.length) {
+            dispatch(setErrorAC(res.data.messages[0]));
+          } else {
+            dispatch(setErrorAC("someError"));
+          }
+          dispatch(setAppStatusAC("succeded"));
+        }
+      })
+      .catch((err) => {
+         
+        dispatch(setAppStatusAC("failed"));
+        dispatch(setErrorAC(err.messages));
+      });
   };
 export const updateTaskTC =
   (
@@ -175,4 +186,4 @@ type ActionsType =
   | SetTodolistsActionType
   | ReturnType<typeof setTasksAC>
   | setAppStatusType
-  | setAppErrorType
+  | setAppErrorType;
