@@ -195,3 +195,11 @@ export const setTasksTC = (todolistsId: string): any => {
       .then((res) => dispatch(setTasksAC(res.data.items, todolistsId)));
   };
 };
+
+export const removeTasksTC = (todolistsId: string, taskId: string): any => {
+  return (dispatch: Dispatch) => {
+    todolistsAPI
+      .deleteTask(todolistsId, taskId)
+      .then((res) => dispatch(removeTaskAC(taskId, todolistsId)));
+  };
+};

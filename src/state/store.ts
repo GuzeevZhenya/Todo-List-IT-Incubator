@@ -8,7 +8,8 @@ import {
   AnyAction,
 } from "redux";
 import { ThunkDispatch } from "redux-thunk";
-import { useDispatch } from "react-redux";
+import { TypedUseSelectorHook, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния
 const rootReducer = combineReducers({
@@ -21,7 +22,8 @@ export const store = legacy_createStore(rootReducer, applyMiddleware(thunk));
 export type AppRootStateType = ReturnType<typeof rootReducer>;
 
 type AppDispatchType = ThunkDispatch<AppDispatchType, unknown, AnyAction>;
-const useAppDispatch = useDispatch<AppDispatchType>
+export const useAppDispatch = useDispatch<AppDispatchType>
+export  const useAppSelector: TypedUseSelectorHook<AppRootStateType> = useSelector
 
 // а это, чтобы можно было в консоли браузера обращаться к store в любой момент
 // @ts-ignore
