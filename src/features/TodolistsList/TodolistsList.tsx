@@ -16,18 +16,16 @@ import {
   updateTaskTC,
 } from "./tasks-reducer";
 import { TaskStatuses } from "../../api/todolists-api";
-import { AddItemForm } from "../../components/AddItemForm/AddItemForm";
-import { Todolist } from "./Todolist/Todolist";
-
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import { AddItemForm } from "../../components/AddItemForm/AddItemForm";
+import { Todolist } from "./Todolist/Todolist";
 
 export const TodolistsList: React.FC = () => {
   const todolists = useAppSelector<Array<TodolistDomainType>>(
     (state) => state.todolists
   );
   const tasks = useAppSelector<TasksStateType>((state) => state.tasks);
-
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -84,15 +82,18 @@ export const TodolistsList: React.FC = () => {
     dispatch(thunk);
   }, []);
 
-  const addTodolist = useCallback((title: string) => {
-    const thunk = addTodolistTC(title);
-    dispatch(thunk);
-  }, []);
+  const addTodolist = useCallback(
+    (title: string) => {
+      const thunk = addTodolistTC(title);
+      dispatch(thunk);
+    },
+    [dispatch]
+  );
 
   return (
     <>
       <Grid container style={{ padding: "20px" }}>
-        <AddItemForm disabled={Todolist.length === 10} addItem={addTodolist} />
+        <AddItemForm addItem={addTodolist} />
       </Grid>
       <Grid container spacing={3}>
         {todolists.map((tl) => {
@@ -102,15 +103,12 @@ export const TodolistsList: React.FC = () => {
             <Grid item key={tl.id}>
               <Paper style={{ padding: "10px" }}>
                 <Todolist
-                  id={tl.id}
-                  title={tl.title}
+                  todolist={tl}
                   tasks={allTodolistTasks}
                   removeTask={removeTask}
                   changeFilter={changeFilter}
                   addTask={addTask}
                   changeTaskStatus={changeStatus}
-                  filter={tl.filter}
-                  entityStatus={tl.entityStatus}
                   removeTodolist={removeTodolist}
                   changeTaskTitle={changeTaskTitle}
                   changeTodolistTitle={changeTodolistTitle}
