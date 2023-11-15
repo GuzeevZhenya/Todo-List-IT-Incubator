@@ -8,13 +8,27 @@ import FormLabel from "@mui/material/FormLabel";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useFormik } from "formik";
+import { useAppDispatch, useAppSelector } from "../../../app/store";
+import { loginTC } from "./auth-reducer";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 type FormikErrorType = {
   email?: string;
   password?: string;
 };
 
+export type LoginDataType = {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+};
+
 export const Login = () => {
+  const dispatch = useAppDispatch();
+
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -38,10 +52,17 @@ export const Login = () => {
       }
       return errors;
     },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values));
+    onSubmit: async (values, actions) => {
+      actions.setSubmitting(true);
+      await dispatch(loginTC(values));
+      actions.setSubmitting(false);
+      formik.resetForm();
     },
   });
+
+  if (isLoggedIn) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <Grid container justifyContent={"center"}>
@@ -67,24 +88,20 @@ export const Login = () => {
               <TextField
                 label="Email"
                 margin="normal"
-                name="email"
-                error={!!formik.errors.email}
-                value={formik.values.email}
-                // helperText={formik.errors.email}
-                onChange={formik.handleChange}
+                error={!!(formik.touched.email && formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+                {...formik.getFieldProps("email")}
               />
               {/* {formik.errors.email ? <div>{formik.errors.email}</div> : null} */}
               <TextField
                 type="password"
                 label="Password"
                 margin="normal"
-                name="password"
-                error={!!formik.errors.password}
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                helperText={formik.errors.password}
+                error={!!(formik.touched.password && formik.errors.password)}
+                helperText={formik.touched.password && formik.errors.password}
+                {...formik.getFieldProps("password")}
               />
-              {/* {formik.errors.password ? (
+              {/* {formik.touched.password && formik.errors.password ? (
                 <div>{formik.errors.password}</div>
               ) : null} */}
               <FormControlLabel
@@ -97,7 +114,12 @@ export const Login = () => {
                   />
                 }
               />
-              <Button type={"submit"} variant={"contained"} color={"primary"}>
+              <Button
+                disabled={formik.isSubmitting}
+                type={"submit"}
+                variant={"contained"}
+                color={"primary"}
+              >
                 Login
               </Button>
             </FormGroup>
