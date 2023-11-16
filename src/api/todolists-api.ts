@@ -56,12 +56,18 @@ export const todolistsAPI = {
 };
 
 export const authAPI = {
+  me() {
+    return instance.get<ResponseType<UserData>>("auth/me");
+  },
   login(data: LoginDataType) {
     return instance.post<
       ResponseType<{ userId: number }>,
       AxiosResponse<ResponseType<{ userId: number }>>,
       LoginDataType
     >("/auth/login", data);
+  },
+  logOut() {
+    return instance.delete<ResponseType>(`auth/login`);
   },
 };
 
@@ -118,4 +124,10 @@ type GetTasksResponse = {
   error: string | null;
   totalCount: number;
   items: TaskType[];
+};
+
+type UserData = {
+  id: number;
+  email: string;
+  login: string;
 };
