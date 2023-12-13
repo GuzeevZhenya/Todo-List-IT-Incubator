@@ -66,7 +66,7 @@ export const authAPI = {
       LoginDataType
     >("/auth/login", data);
   },
-  logOut() {
+  logOut  () {
     return instance.delete<ResponseType>(`auth/login`);
   },
 };
