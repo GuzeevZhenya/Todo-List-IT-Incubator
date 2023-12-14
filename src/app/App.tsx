@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import { TodolistsList } from "../features/TodolistsList/TodolistsList";
+import { TodolistsList } from "features/TodolistsList/TodolistsList";
 import { useAppDispatch, useAppSelector } from "./store";
 import { RequestStatusType } from "./app-reducer";
 import AppBar from "@mui/material/AppBar";
@@ -11,10 +11,10 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import LinearProgress from "@mui/material/LinearProgress";
 import { Menu } from "@mui/icons-material";
-import { ErrorSnackbar } from "../components/ErrorSnackbar/ErrorSnackbar";
-import { Login } from "../features/TodolistsList/Login/Login";
+import { ErrorSnackbar } from "components/ErrorSnackbar/ErrorSnackbar";
+import { Login } from "features/TodolistsList/Login/Login";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { authTC, logOutTC } from "../features/TodolistsList/Login/auth-reducer";
+import { authTC, logOutTC } from "features/TodolistsList/Login/auth-reducer";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 
 function App() {
