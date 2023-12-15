@@ -1,4 +1,3 @@
-import { Dispatch } from "redux";
 import { appActions } from "app/app-reducer";
 import { authAPI } from "api/todolists-api";
 import {
@@ -6,7 +5,7 @@ import {
   handleServerNetworkError,
 } from "utils/error-utils";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { AppThunk, AppThunkDispatch } from "app/store";
+import { AppThunk } from "app/store";
 
 const slice = createSlice({
   name: "auth",
@@ -62,7 +61,7 @@ export const logOutTC = (): AppThunk => async (dispatch) => {
   try {
     const res = await authAPI.logOut();
     if (res.data.resultCode === 0) {
-      dispatch(authAction.setIsLoggedIn({ isLoggedIn: true }));
+      dispatch(authAction.setIsLoggedIn({ isLoggedIn: false }));
       dispatch(appActions.setAppStatus({ status: "succeeded" }));
     } else {
       handleServerAppError(res.data, dispatch);

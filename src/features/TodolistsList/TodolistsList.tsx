@@ -2,12 +2,12 @@ import React, { useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import {
   addTodolistTC,
-  changeTodolistFilterAC,
   changeTodolistTitleTC,
   fetchTodolistsTC,
   FilterValuesType,
   removeTodolistTC,
   TodolistDomainType,
+  todolistsActions,
 } from "./todolists-reducer";
 import {
   addTaskTC,
@@ -54,8 +54,7 @@ export const TodolistsList: React.FC = () => {
   ) {
     const thunk = updateTaskTC(id, { status }, todolistId);
     dispatch(thunk);
-  },
-  []);
+  }, []);
 
   const changeTaskTitle = useCallback(function (
     id: string,
@@ -64,17 +63,18 @@ export const TodolistsList: React.FC = () => {
   ) {
     const thunk = updateTaskTC(id, { title: newTitle }, todolistId);
     dispatch(thunk);
-  },
-  []);
+  }, []);
 
   const changeFilter = useCallback(function (
     value: FilterValuesType,
     todolistId: string
   ) {
-    const action = changeTodolistFilterAC(todolistId, value);
+    const action = todolistsActions.changeTodolistFilter({
+      id: todolistId,
+      filter: value,
+    });
     dispatch(action);
-  },
-  []);
+  }, []);
 
   const removeTodolist = useCallback(function (id: string) {
     const thunk = removeTodolistTC(id);
