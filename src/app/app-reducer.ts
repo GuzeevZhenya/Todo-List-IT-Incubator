@@ -1,49 +1,47 @@
-const initialState: InitialStateType = {
-  status: "idle",
-  error: null,
-  initialized: false,
-};
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-export const appReducer = (
-  state: InitialStateType = initialState,
-  action: ActionsType
-): InitialStateType => {
-  switch (action.type) {
-    case "APP/SET-STATUS":
-      return { ...state, status: action.status };
-    case "APP/SET-ERROR":
-      return { ...state, error: action.error };
-    case "APP/SET-INITIALIZED":
-      return { ...state, initialized: action.isInitialized };
-    default:
-      return { ...state };
-  }
-};
+const slice = createSlice({
+  name: "app",
+  initialState: {
+    status: "idle" as RequestStatusType,
+    error: null as string | null,
+    initialized: false,
+  },
+  reducers: {
+    setAppError: (state, action: PayloadAction<{ error: string | null }>) => {
+      state.error = action.payload.error;
+    },
+    setAppStatus: (
+      state,
+      action: PayloadAction<{ status: RequestStatusType }>
+    ) => {
+      state.status = action.payload.status;
+    },
+    setAppInitialized: (
+      state,
+      action: PayloadAction<{ initialized: boolean }>
+    ) => {
+      state.initialized = action.payload.initialized;
+    },
+  },
+});
+
+export const appReducer = slice.reducer;
+export const appActions = slice.actions;
+
+// export const _appReducer = (
+//   state: InitialStateType = initialState,
+//   action: ActionsType
+// ): InitialStateType => {
+//   switch (action.type) {
+//     case "APP/SET-STATUS":
+//       return { ...state, status: action.status };
+
+//     case "APP/SET-INITIALIZED":
+//       return { ...state, initialized: action.isInitialized };
+//     default:
+//       return { ...state };
+//   }
+// };
 
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed";
-export type InitialStateType = {
-  // происходит ли сейчас взаимодействие с сервером
-  status: RequestStatusType;
-  // если ошибка какая-то глобальная произойдёт - мы запишем текст ошибки сюда
-  error: string | null;
-  initialized: boolean;
-};
-
-export const setAppErrorAC = (error: string | null) =>
-  ({ type: "APP/SET-ERROR", error } as const);
-export const setAppStatusAC = (status: RequestStatusType) =>
-  ({ type: "APP/SET-STATUS", status } as const);
-
-export const setAppInitializedAC = (isInitialized: boolean) =>
-  ({ type: "APP/SET-INITIALIZED", isInitialized } as const);
-
-export type SetAppErrorActionType = ReturnType<typeof setAppErrorAC>;
-export type SetAppStatusActionType = ReturnType<typeof setAppStatusAC>;
-export type SetAppInitializedActionType = ReturnType<
-  typeof setAppInitializedAC
->;
-
-type ActionsType =
-  | SetAppErrorActionType
-  | SetAppStatusActionType
-  | SetAppInitializedActionType;

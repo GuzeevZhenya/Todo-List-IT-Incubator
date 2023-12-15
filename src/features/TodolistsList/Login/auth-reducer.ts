@@ -1,10 +1,5 @@
 import { Dispatch } from "redux";
-import {
-  SetAppErrorActionType,
-  SetAppStatusActionType,
-  setAppInitializedAC,
-  setAppStatusAC,
-} from "app/app-reducer";
+import { appActions } from "app/app-reducer";
 import { authAPI } from "api/todolists-api";
 import {
   handleServerAppError,
@@ -32,13 +27,13 @@ export const authAction = slice.actions;
 export const loginTC =
   (data: any): AppThunk =>
   async (dispatch) => {
-    dispatch(setAppStatusAC("loading"));
+    dispatch(appActions.setAppStatus({ status: "loading" }));
     try {
       const res = await authAPI.login(data);
 
       if (res.data.resultCode === 0) {
         dispatch(authAction.setIsLoggedIn({ isLoggedIn: true }));
-        dispatch(setAppStatusAC("succeeded"));
+        dispatch(appActions.setAppStatus({ status: "succeeded" }));
       } else {
         handleServerAppError(res.data, dispatch);
       }
@@ -52,14 +47,14 @@ export const authTC = (): AppThunk => async (dispatch) => {
   try {
     if (res.data.resultCode === 0) {
       dispatch(authAction.setIsLoggedIn({ isLoggedIn: true }));
-      dispatch(setAppStatusAC("succeeded"));
+      dispatch(appActions.setAppStatus({ status: "succeeded" }));
     } else {
       handleServerAppError(res.data, dispatch);
     }
   } catch (error) {
     handleServerNetworkError(error as { message: string }, dispatch);
   } finally {
-    dispatch(setAppInitializedAC(true));
+    dispatch(appActions.setAppInitialized({ initialized: true }));
   }
 };
 
@@ -68,13 +63,13 @@ export const logOutTC = (): AppThunk => async (dispatch) => {
     const res = await authAPI.logOut();
     if (res.data.resultCode === 0) {
       dispatch(authAction.setIsLoggedIn({ isLoggedIn: true }));
-      dispatch(setAppStatusAC("succeeded"));
+      dispatch(appActions.setAppStatus({ status: "succeeded" }));
     } else {
       handleServerAppError(res.data, dispatch);
     }
   } catch (error) {
     handleServerNetworkError(error as { message: string }, dispatch);
   } finally {
-    dispatch(setAppInitializedAC(true));
+    dispatch(appActions.setAppInitialized({ initialized: true }));
   }
 };
