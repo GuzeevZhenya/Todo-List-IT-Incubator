@@ -10,9 +10,9 @@ import {
   todolistsActions,
 } from "./todolists-reducer";
 import {
-  addTaskTC,
-  removeTaskTC,
+  removeTasks,
   TasksStateType,
+  tasksThunk,
   updateTaskTC,
 } from "./tasks-reducer";
 import { TaskStatuses } from "../../api/todolists-api";
@@ -37,14 +37,15 @@ export const TodolistsList: React.FC = () => {
     dispatch(thunk);
   }, []);
 
-  const removeTask = useCallback(function (id: string, todolistId: string) {
-    const thunk = removeTaskTC(id, todolistId);
-    dispatch(thunk);
+  const removeTask = useCallback(function (taskId: string, todolistId: string) {
+    // const thunk = removeTasks({ taskId, todolistId });
+    // dispatch(thunk);
+    dispatch(tasksThunk.removeTasks({ taskId, todolistId }));
   }, []);
 
   const addTask = useCallback(function (title: string, todolistId: string) {
-    const thunk = addTaskTC(title, todolistId);
-    dispatch(thunk);
+    // const thunk = addTaskTC(title, todolistId);
+    // dispatch(thunk);
   }, []);
 
   const changeStatus = useCallback(function (
